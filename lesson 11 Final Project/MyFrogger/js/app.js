@@ -1,21 +1,21 @@
-var numRows = 6;
+// x directions = columns
+var width = 505;
 var numCols = 5;
-var rowStep = 83;
 var colStep = 101;
-            
+
+// y directions = rows
+var height = 606;
+var numRows = 6;
+var rowStep = 83;
 var minEnemyRow = 1;
 var maxEnemyRow = 3;
 
 // Enemies our player must avoid
-var Enemy = function(row, col) {
+var Enemy = function(col, row) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    if (row < minEnemyRow) row = minEnemyRow;
-    if (row > maxEnemyRow) row = maxEnemyRow;
-    if (col < 0) col = 0;
-    if (col >= numCols) col = numCols - 1;
-    this.x = row * rowStep;
-    this.y = col * colStep;
+    this.x = col * colStep;
+    this.y = row * rowStep;
     
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -29,6 +29,7 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += dt;
+    if (this.x >= width) this.x = 0;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -39,20 +40,24 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function() {
-    this.x = ((numCols - 1) / 2) * colStep;
-    this.y = (numRows - 1) * rowStep;
+var Player = function(col, row) {
+    this.x = col * colStep;
+    this.y = row * rowStep;
     this.direction = 'up';
     this.sprite = 'images/char-boy.png';
 };
 
 Player.prototype.update = function(dt) {
     switch(this.direction) {
-        case 'left':  this.x -= 1; break;
-        case 'right': this.x += 1; break;
-        case 'up':    this.y -= 1; break;
-        case 'down':  this.y += 1; break;
+        case 'left':  this.x -= dt; break;
+        case 'right': this.x += dt; break;
+        case 'up':    this.y -= dt; break;
+        case 'down':  this.y += dt; break;
     }
+    if (this.x < 0) this.x = width - 1;
+    if (this.x >= width) this.x = 0;
+    if (this.y < 0) this.y = height - 1;
+    if (this.y >= height) this.y = 0;
 };
 
 Player.prototype.render = function() {
@@ -66,8 +71,8 @@ Player.prototype.handleInput = function(direction) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
-var player = new Player();
+var allEnemies = [new Enemy(0,1), new Enemy(3,1), new Enemy(1,2), new Enemy(2,2), new Enemy(4,3)];
+var player = new Player(2,5);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
