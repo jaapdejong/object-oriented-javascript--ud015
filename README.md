@@ -1,4 +1,8 @@
-Install javascriipt shell:
+# ud015
+
+For the 'Object Oriented Javascript' course
+
+Install javascript shell:
 
 	sudo apt-get install nodejs
 
